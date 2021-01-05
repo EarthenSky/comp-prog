@@ -41,24 +41,6 @@ fn points_from_factors(mut factors: Vec<u64>) -> u64 {
 
     // TODO: later -> do optimal permuatations -> start with smallest subset of each size, then choose the smallest & redo until all subsets are too small.
 
-    /*
-    for i in 2..*factors.iter().max().expect("factors is empty") {
-        if factors.contains(&i) {
-            let vec = get_factors_functional(i);
-
-            // removes from factors the elements in vec. if factors has multiple versions of that element, it only removes one.
-            for item in vec {
-                let index = factors.iter().position(|x| *x == item);
-                match index {
-                    Some(i) => { factors.remove(i); },
-                    None => (),
-                }
-            }
-
-            points += 1;
-        }
-    }*/
-
     points
 }
 
@@ -117,8 +99,6 @@ fn main() {
         let points = points_from_factors(factors);
         if get_points(num) != points {
             println!("failed ->\t{}\t| {} != {}", num, get_points(num), points);
-        } else {
-            println!("succeeded ->\t{}\t| {} != {}", num, get_points(num), points);
         }
     }
     
