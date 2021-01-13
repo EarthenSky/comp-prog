@@ -1,3 +1,5 @@
+# SOLVED
+
 # solving: https://open.kattis.com/problems/diagonalcut
 # from: https://vjudge.net/contest/417235#problem/A
 
@@ -17,13 +19,18 @@ def all():
 
     m //= d
     n //= d
+    
     target = (n - m) // 2
     
     # Early exit conditions
-    
+
+    # NOTE: this condition is not needed, because if there is no valid target
+    # then the constant time algorithm can't accidentally find it.
+    '''    
     if (n - m) % 2 != 0:
         print("0")
         return 
+    '''
 
     if m == n:
         print(d)

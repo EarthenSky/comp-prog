@@ -1,3 +1,5 @@
+// unsolved
+
 // For: https://open.kattis.com/problems/listgame2
 
 use std::cmp::Ordering;
