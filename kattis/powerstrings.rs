@@ -113,7 +113,8 @@ fn string_repetitions_break(string: &str) -> u32 {
 }
 */
 
-// This is the top down recursive algorithm.
+// This is the top down left-recursive algorithm. -> the main pass will recurse with any pn, but any other passes will
+// only recurse down with that specific number.
 fn string_repetitions_reuse(string: &str) -> u32 {
     0
 }
