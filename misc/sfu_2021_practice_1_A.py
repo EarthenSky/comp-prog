@@ -5,7 +5,7 @@
 
 import math
 
-def all():
+def main():
     in_values = input().split(" ")
 
     m = int(in_values[0])
@@ -78,4 +78,4 @@ def all():
     else:
         print("0")
     
-all()
+main()
