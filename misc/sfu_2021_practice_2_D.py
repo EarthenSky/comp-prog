@@ -75,7 +75,9 @@ def main():
         if val == 1:
             grid[x + y * m] = 0
             if dist_r + dist_l + 1 == max_val:
-                max_val = do_simulation(grid, n, m)
+                # NOTE: only need to simulate the current row if I have a matrix containing the saved lengths of runs in
+                # each row. Then you can find max from a smaller matrix. -> BIG speed up...
+                max_val = do_simulation(grid, n, m) 
         else:
             grid[x + y * m] = 1 
             if dist_r + dist_l + 1 > max_val:
