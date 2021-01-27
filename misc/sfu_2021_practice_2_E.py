@@ -1,4 +1,4 @@
-# undetermined
+# unsolved
 
 # solving: 
 # from: https://vjudge.net/contest/418454#problem/E
@@ -14,13 +14,13 @@
 # cycles that come back and hit the "walkable" areas
 
 # This is for recursion
-import sys
-sys.setrecursionlimit(4 * 10**6 + 1000)
-# YEP! -> Error had to do with recursion limit 
+# import sys
+# sys.setrecursionlimit(4 * 10**6 + 1000)
+# YEP! -> Error had to do with recursion limit
 
 # NOTE: This algorithm is a bit inefficient, although it runs in time O(m * n) ~ O(n^3), with a better avg case
 # Uses pseudo DFS -> by walkable, I mean any position can get to any other position
-def is_digraph_walkable(digraph):
+def is_digraph_strongly_connected(digraph):
     walked = set({0}) # inital item must be in set
     
     #print(digraph); print(walked)
@@ -55,42 +55,121 @@ def rec_walk_search(at, digraph, walked):
 
     return successful_exit
 
-# TODO: write a non-recursive version of this that it logically different.
-def is_digraph_walkable_fast(digraph):
-    walked = set({0})
+# TODO: this one
+# A non-recursive version that it logically different.
+def is_digraph_strongly_connected_fast(digraph):
+    walkable = set({0})
 
-    stack = []
-    stack.append(0)
+    frontier = []
+    frontier.append(0)
 
-    successful_exit = False
+    while len(frontier) != 0:
+        head = frontier.pop() # take one from frontier
+        current_path = [head]
+        current_path_set = set({head}) # NOTE: replace this with current_path to speed up performance on smaller graphs
 
-    while len(stack) != 0:
-        at = stack.pop()
-        successful_exit = False
+        child_stack = []
 
-        for item in digraph[at]:
-            if (item in walked) == True:
-                walked.add(at)
-                successful_exit = True
-                break
+        # find a single loop
+        hit_walkable = False
+        while not hit_walkable:
+            children = []
 
-        # do an expansion walk
-        for item in digraph[at]:
-            if (item in walked) == False:
-                if rec_walk_search(item, digraph, walked): # Oops, accidentally recursive....
-                    walked.add(at)
-                    successful_exit = True
+            print("current_path -> ", current_path)
+
+            # look through all children
+            for item in digraph[head]:
+                if item in walkable: # item in current_path_set or 
+                    hit_walkable = True
+                elif not item in current_path_set: # don't walk back onto self, unless self is walkable
+                    children.append(item)
+            
+            # if no children are walkable, then the path must take one step
+            if not hit_walkable:
+                # case: there is nowhere left for the current path to go -> the graph is not strongly connected
+                if len(children) == 0: 
+                    children = current_path.pop()
+                    # EDIT: TODO: recurse backwards
                 else:
-                    # This is probably an indicator that we are ded.
-                    # TODO: make sure this is correct
-                    successful_exit = False
-                    break
+                    head = children.pop()
+                    current_path += [head]
+                    current_path_set.add(head)
+            
+            child_stack.append(children)
+        
+        # case: at least one child is walkable, so the current path is all walkable
+        for item in current_path:
+            walkable.add(item)
 
-        if successful_exit == False:
-            return False
+        # add children from child_stack to the frontier:
 
-    return len(walked) == len(digraph)
+    return len(walkable) == len(digraph) # returns true if all nodes are walkable
 
+# A non-recursive version that it logically different.
+# NOTE: this does not work because it needs one more list which determines which local_frontier spaces can be re-checked.
+# TODO: just do the walk in backwards order and use a stack to hold the items. If a space is ignored, then it will simply 
+# not be retraversed & will show up as not an element in the walkable set.
+def is_digraph_strongly_connected_fast_complicated(digraph):
+    walkable = set({0})
+
+    frontier = []
+    frontier.append(0)
+
+    while len(frontier) != 0:
+        head = frontier.pop() # take one from frontier
+        current_path_set = set({head}) # NOTE: remove this with current_path to speed up performance on smaller graphs
+
+        local_frontier = []
+
+        # find a single loop
+        hit_walkable = False
+        while not hit_walkable:
+            children = []
+
+            #print("current_path -> ", current_path_set)
+            
+            hit_path = False
+
+            # look through all children
+            for item in digraph[head]:
+                if item in walkable:
+                    hit_walkable = True
+                elif not item in current_path_set: # don't walk back onto self
+                    children.append(item)
+                elif item in current_path_set:
+                    hit_path = True
+            
+            # if no children are walkable, then the path must take one step
+            if not hit_walkable:
+                # case: there is nowhere left for the current path to go -> the graph is not strongly connected
+                if len(children) == 0 and not hit_path: 
+                    return False
+                elif len(children) == 0 and hit_path:
+                    # case: we hit a dead end and the local frontier is empty so we truly have nowhere else to go.
+                    # TODO: track the depth of the local_frontier -> can only take an item from local frontier if it is accessible from the current node.
+                    #       will need to make a depth tracking chart for figuring out which connections can go where.
+                    # OR -> just do it more traditionally recursively
+                    if len(local_frontier) == 0: 
+                        return False
+
+                    # no children left, but we hit our own path, so we can keep going with any local frontier item
+                    head = local_frontier.pop()
+                    current_path_set.add(head)
+                else:
+                    # start with any item in children
+                    head = children.pop()
+                    current_path_set.add(head)
+            
+            local_frontier += children
+        
+        # case: at least one child is walkable, so the current path is all walkable
+        for item in current_path_set:
+            walkable.add(item)
+
+        # copy local frontier to main frontier
+        frontier += local_frontier
+
+    return len(walkable) == len(digraph) # returns true if all nodes are walkable
 
 def main():
     while True:
@@ -110,6 +189,6 @@ def main():
                 digraph[v].add(w)
                 digraph[w].add(v)
 
-        print("1" if is_digraph_walkable_fast(digraph) else "0")
+        print("1" if is_digraph_strongly_connected_fast(digraph) else "0")
 
 main()
