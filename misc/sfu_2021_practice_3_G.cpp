@@ -1,8 +1,5 @@
 // SOLVED
 
-// solving:
-// from: 
-
 #include <vector>
 #include <iostream>
 
