@@ -6,13 +6,16 @@
 #include <math.h>
 //#include <string>
 
+// NOTE: when trying to optimize a function, consider the 
+
 // NOTE: second two parameters are double, first two are not
 double distance(long long x0, long long y0, double x1, double y1) {
     return std::sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
 }
 
+// NOTE: second two parameters are double, first two are not
 double distance_nosqrt(long long x0, long long y0, double x1, double y1) {
-    return static_cast<double>((x0 - x1) * (x0 - x1)) + (y0 - y1) * (y0 - y1);
+    return (x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1);
 }
 
 long long distance_nosqrt_ll(long long x0, long long y0, long long x1, long long y1) {
@@ -36,7 +39,7 @@ double line_segment_point_closest_distance(long long px, long long py, long long
         yint = y2;
     } else {
         double m1 = (y1 - y2) / static_cast<double>(x1 - x2); 
-        //double m2 = -1 / m1;  
+        //double m2 = -1 / m1;
 
         xint = (px + m1*m1 * x1 + (py - y1) * m1) / (m1*m1 + 1);
         //xint = (-m2 * px + m1 * x1 + py - y1) / (m1 - m2);
@@ -46,6 +49,8 @@ double line_segment_point_closest_distance(long long px, long long py, long long
     if (xint <= maxx and xint >= minx and yint <= maxy and yint >= miny) {
         return distance_nosqrt(px, py, xint, yint);
     } else if (distance_nosqrt(x1, y1, xint, yint) >= distance_nosqrt(x2, y2, xint, yint)) {
+    // NOTE: this may produce a nearly insignificant speedup.
+    //} else if ( (x1 - x2) * (x1 + x2) * (y1 - y2) * (y1 + y2) >= 2 * yint * (y1 - y2) + 2 * xint * (x1 - x2) ) {
         return distance_nosqrt_ll(px, py, x2, y2);
     } else {
         return distance_nosqrt_ll(px, py, x1, y1);
@@ -83,7 +88,7 @@ int main() {
     double dist = line_segment_point_closest_distance(px, py, lx, ly, fx, fy);
     min = std::min(min, dist);
 
-    double pi = 3.141592653589793238462643383279502884;
+    double pi = 3.14159265358979323846264338327950;
 
     std::cout.precision(16);
     std::cout << pi * (max - min) << "\n";
