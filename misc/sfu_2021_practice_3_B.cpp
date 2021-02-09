@@ -44,13 +44,12 @@ double line_segment_point_closest_distance(long long px, long long py, long long
         xint = (px + m1*m1 * x1 + (py - y1) * m1) / (m1*m1 + 1);
         //xint = (-m2 * px + m1 * x1 + py - y1) / (m1 - m2);
         yint = m1 * (xint - x1) + y1;
+        
     }
 
     if (xint <= maxx and xint >= minx and yint <= maxy and yint >= miny) {
         return distance_nosqrt(px, py, xint, yint);
     } else if (distance_nosqrt(x1, y1, xint, yint) >= distance_nosqrt(x2, y2, xint, yint)) {
-    // NOTE: this may produce a nearly insignificant speedup.
-    //} else if ( (x1 - x2) * (x1 + x2) * (y1 - y2) * (y1 + y2) >= 2 * yint * (y1 - y2) + 2 * xint * (x1 - x2) ) {
         return distance_nosqrt_ll(px, py, x2, y2);
     } else {
         return distance_nosqrt_ll(px, py, x1, y1);

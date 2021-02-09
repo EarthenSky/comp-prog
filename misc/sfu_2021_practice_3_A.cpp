@@ -14,7 +14,7 @@ int main() {
     std::cin >> t >> d;
     
     if (d == 0) {
-        std::cout << v1 * t << "\n";
+        std::cout << v1 * t << std::endl;
         return 0;
     }
 
@@ -52,7 +52,7 @@ int main() {
         speed = std::min(v2, speed + d);
     }*/
     
-    std::cout << path_len << "\n";
+    std::cout << path_len << std::endl;
 
     return 0;
 }
