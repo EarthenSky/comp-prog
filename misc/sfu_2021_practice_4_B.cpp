@@ -6,11 +6,16 @@
 #include <string>
 
 // Lessons:
-//  - Read the initial testcase & understand how it works before writing a 100+ line solution. 
+//  - Read the initial testcase & understand how it works before writing a 100+ line solution.
+//  - The trick to this problem was to find an efficient way to compute sums -> DP :c
+//  - ...
+//  - 
 
+/*
+// this solution might work, but is too complicated.
 int rec_do_cut(std::vector<int>& hole_positions, int cur_i, int min_l, int k) {
     std::cout << "cur_i, min_l, k: " << cur_i << "," << min_l << "," << k << "\n";
-    if (cur_i + 1 == hole_positions.size() - 2) { // This means we went too far. -> should never trigger.
+    if (cur_i + 1 == hole_positions.size()) { // This means we went too far. -> should never trigger.
         return -1;
     }
 
@@ -23,6 +28,7 @@ int rec_do_cut(std::vector<int>& hole_positions, int cur_i, int min_l, int k) {
     } else {
         int cur_v = 0; // the value of the current segment
         int max_best_l = min_l;
+        int cur_min = 2 * 1000 * 1000 * 1000;
 
         do {
             std::cout << "loop, cur_v: " << cur_v << "\n";
@@ -31,7 +37,9 @@ int rec_do_cut(std::vector<int>& hole_positions, int cur_i, int min_l, int k) {
                 cur_i += 1;
             }
 
-            if (cur_i + 1 == hole_positions.size() - 2) { // This means we went too far. -> should never trigger?
+            std::cout << "loop, cur_v updated: " << cur_v << "\n";
+
+            if (cur_i + 1 == hole_positions.size() - 1) { // This means we went too far. -> should never trigger? -> is this wrong?
                 return -1;
             }
 
@@ -39,16 +47,19 @@ int rec_do_cut(std::vector<int>& hole_positions, int cur_i, int min_l, int k) {
             
             // needs to report back smallest section, but section is represented by maximum.
             int max_current_iteration = std::max(max_best_l, cur_v);
-            min_l = std::min(min_l, max_current_iteration);
+            cur_min = std::min(cur_min, max_current_iteration);
+            
+            std::cout << "loop, cur_min updated: " << cur_min << "\n";
 
             if(max_best_l == -1) 
                 break;
 
-        } while(cur_v + hole_positions[cur_i + 1] <= min_l); // gt here? -> change to normal while? -> i think do while is good.
+        } while(cur_v + hole_positions[cur_i + 1] <= cur_min); // gt here? -> change to normal while?
 
         return min_l;
     }
 }
+*/
 
 void do_case() {
     std::cout << "case\n";
@@ -65,7 +76,6 @@ void do_case() {
     //std::cin.ignore();
     std::getline(std::cin, line);
     std::getline(std::cin, line);
-    std::cout << "line: " << line << "\n";
     std::istringstream stream(line);
     stream >> last;
     while (stream >> num) {
@@ -74,14 +84,13 @@ void do_case() {
         max = std::max(max, diff);
         hole_positions.push_back(diff);
         last = num;
-        std::cout << "num: " << diff << "\n";
     }
 
     std::cout << "rec start: max, sum " << max << "," << sum << "\n";
 
     // call recursive function, return max, memoize.
     int min_l = std::max(max, sum / n); // biggest of max & floor(mean).
-    std::cout << rec_do_cut(hole_positions, 0, min_l, k)+1 << std::endl; // this +1 is probably okay here.
+    std::cout << rec_do_cut(hole_positions, 0, min_l, k) << std::endl;
 }
 
 int main() {
