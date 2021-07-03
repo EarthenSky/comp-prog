@@ -2,22 +2,53 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Day4 {
+using System.Linq;
+
+public class HashableList //: IList<int>
+{
+    public HashableList(int[] list) {
+        this.list = list;
+    }
+
+    public int[] list { get; set; }
+
+    public override bool Equals(object obj) {
+        HashableList other = obj as HashableList;
+        if(other == null) return false;
+        return list[0] == other.list[0] && list[1] == other.list[1] && list[2] == other.list[2];
+    }
+
+    // only uses the first 3 items of the list.
+    public override int GetHashCode() {
+        if (list == null)
+            return 0;
+        else {
+            int hash = 43;
+            hash += hash ^ (19 * list[0].GetHashCode());
+            hash += hash ^ (19 * list[1].GetHashCode());
+            hash += hash ^ (19 * list[2].GetHashCode());
+            return hash;
+        } 
+    } 
+}
+
+class Day4 
+{
     const long MAX_NUM = 10*10*10*10*10;
     
-    Dictionary<(int, int, int), bool> taken = new Dictionary<(int, int, int), bool>();
-    HashSet<int>[] indexof = new HashSet<int>[MAX_NUM*2 + 1];
+    //Dictionary<(int, int, int), bool> taken = new Dictionary<(int, int, int), bool>();
+    int[] countOf = new int[MAX_NUM*2 + 1]; // TODO: turn to hashmap
     bool[] inNums = new bool[MAX_NUM*2 + 1];
     
     public IList<IList<int>> ThreeSum(int[] nums) {
-        List<IList<int>> ret = new List<IList<int>>(); 
+        HashSet<HashableList> triplesSet = new HashSet<HashableList>(); 
         
+        Array.Sort(nums);
+
         // setup lookup table
         for(int i = 0; i < nums.Length; i++) {
             inNums[nums[i] + MAX_NUM] = true;
-            if (indexof[nums[i] + MAX_NUM] == null)
-                indexof[nums[i] + MAX_NUM] = new HashSet<int>();
-            indexof[nums[i] + MAX_NUM].Add(i);
+            countOf[nums[i] + MAX_NUM] += 1;
         }
         
         // go through every unique pair
@@ -25,38 +56,51 @@ public class Day4 {
             for (int j = 0; j < i; j++) {
                 int complement = -(nums[i] + nums[j]);
                 
-                if (!inNums[complement + MAX_NUM])
+                if (complement > MAX_NUM) {
+                    break;
+                }
+                else if (complement < -MAX_NUM || !inNums[complement + MAX_NUM])
                     continue;
 
-                int containedNums = 0;
-                containedNums += indexof[complement + MAX_NUM].Contains(i) ? 1 : 0;
-                containedNums += indexof[complement + MAX_NUM].Contains(j) ? 1 : 0;
+                if (countOf[complement + MAX_NUM] < 1 + (complement == nums[j] ? 1 : 0) + (complement == nums[i] ? 1 : 0))
+                    continue;
 
-                if (indexof[complement + MAX_NUM].Count - containedNums > 0 && 
-                    !taken.ContainsKey(MakeSortedTuple(nums[i], nums[j], complement))
-                ) {
-                    ret.Add(MakeTriple(nums[i], nums[j], complement));
-                    taken[MakeSortedTuple(nums[i], nums[j], complement)] = true;
-                }
+                triplesSet.Add(MakeSortedTriple(nums[i], nums[j], complement));
+                
+                
             }
         }
 
-        return ret;
+        return new List<IList<int>>(triplesSet.Select(x => x.list).ToList());
     }
 
-    private List<int> MakeTriple(int a, int b, int c) {
-        return new List<int>{a, b, c};
-    }
-
-    // This tuple is sorted so that a < b < c
-    private (int, int, int) MakeSortedTuple(int a, int b, int c) {
+    private HashableList MakeSortedTriple(int a, int b, int c) {
+        //return new int[] {a, b, c};
         var list = new int[] {a, b, c};
-        Array.Sort(list);
-        return (list[0], list[1], list[2]);
+        TinySort(list); // this sort is overkill--> I should use insertion sort or something.
+        return new HashableList(list);
     }
-}
 
-public class Testing {
+    private void TinySort(int[] list) {
+        for (int i = 0; i < 2; i++) {
+            if (list[i+1] < list[i]) {
+                int tmp = list[i];
+                list[i] = list[i+1];
+                list[i+1] = tmp;
+            }
+        }
+        for (int i = 0; i < 1; i++) {
+            if (list[i+1] < list[i]) {
+                int tmp = list[i];
+                list[i] = list[i+1];
+                list[i+1] = tmp;
+            }
+        }
+    }
+};
+
+public class Testing 
+{
     public static void Main() {
         var instance = new Day4();
         var list = new int[] {-1,0,1,2,-1,-4};
@@ -66,7 +110,10 @@ public class Testing {
         Console.WriteLine("=========");
 
         var instance2 = new Day4();
-        var list2 = new int[] {1, -2, 1, 0, 0};
+        var list2 = new int[100];
+        for (int i = 0; i < 100; i++) {
+            list2[i] = (i-50);
+        }
         var triples2 = instance2.ThreeSum(list2);
 
         PrintListOfList(triples2);
