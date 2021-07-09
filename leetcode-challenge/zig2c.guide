@@ -1,0 +1,2 @@
+This pipeline uses zig's wasm backend combined with wasm2c. 
+I installed these 2 tools on different operating systems for simplicity, so I can't use a single script to run the process.
