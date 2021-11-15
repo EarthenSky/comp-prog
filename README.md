@@ -1,5 +1,5 @@
-# kattis-solutions
- solutions to problems from the website kattis
+# competitive-programming
+ solutions to various programming problems
 
 a_different_list_game_test.rs -> needs rand crate for testing.
 
