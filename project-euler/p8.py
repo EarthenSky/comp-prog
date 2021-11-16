@@ -39,14 +39,19 @@ def max_adjacent_digits(n):
     for i in range(n, len(number)):
         if p == 0:
             distance_from_last_zero = 0
-
-        if distance_from_last_zero <= 12:
-            pass   
+            pn = 1
+        else:
+            distance_from_last_zero += 1
+        
+        if distance_from_last_zero < 13:
+            pn *= number[i-n]  
+            if distance_from_last_zero == 13:
+                p = pn
+                max_p = max(max_p, p)
         else:
             p /= number[i-n]
             p *= number[i]
             max_p = max(max_p, p)
-        distance_from_last_zero += 1
 
 
 print(max_adjacent_digits(4))
