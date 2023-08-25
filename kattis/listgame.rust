@@ -1,0 +1,23 @@
+fn main() {
+	// read input integer
+	let mut input_line = String::new();
+	std::io::stdin()
+		.read_line(&mut input_line)
+		.unwrap();
+	let mut val: i32 = input_line.trim().parse().unwrap();
+	
+	// find all or n-1 prime factors
+	let mut counter = 0;
+	let max = (val as f64).sqrt().ceil() as i32;
+	for i in 2..=max {
+		while val % i == 0 {
+			val = val / i;
+			counter += 1;
+		}
+	}
+
+	// include the last number, but only if non-zero
+	counter += if val != 1 { 1 } else { 0 };
+
+	println!("{}", counter);
+}
