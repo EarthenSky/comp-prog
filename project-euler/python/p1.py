@@ -1,3 +1,5 @@
+from utils import readint
+
 def sum_of_multiples(top):
     sum = 0
     for i in range(0, top):
@@ -5,5 +7,7 @@ def sum_of_multiples(top):
             sum += i
     return sum
 
-print(sum_of_multiples(10))
-print(sum_of_multiples(1000))
+#print(sum_of_multiples(10))
+
+top = readint("../input1")
+print(sum_of_multiples(top))
