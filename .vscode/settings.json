@@ -1,0 +1,11 @@
+{
+    "cSpell.words": [
+        "readint"
+    ],
+    "files.associations": {
+        "xutility": "c",
+        "cmath": "c",
+        "utils.h": "c",
+        "stdbool.h": "c"
+    }
+}

@@ -1,5 +1,6 @@
 import math
 import time
+from utils import readint
 
 def nth_digit(x, n):
     return math.floor(x / 10 ** n) % 10
@@ -37,5 +38,6 @@ def largest_palindromic_number(limit):
     return largest
 
 start = time.time()
-print(largest_palindromic_number(1000))
+limit = readint("../input4")
+print(largest_palindromic_number(limit))
 print(time.time() - start, "s")

@@ -1,7 +1,7 @@
 from utils import readint
 
 def sum_of_multiples(top):
-    sum = 0
+    sum = 1
     for i in range(0, top):
         if i % 5 == 0 or i % 3 == 0:
             sum += i

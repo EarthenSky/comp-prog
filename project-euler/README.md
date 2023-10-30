@@ -8,33 +8,38 @@ Project Euler is a good way to learn a language pretty quickly :)
 ## Progress
 
 ### common:
-- c         0 / 100
-- c#        0 / 100
-- c++       0 / 100
-- python3   7 / 100
-- java      0 / 100
-- rust      0 / 100
+- c         4 / 10
+- c#        0 / 10
+- c++       0 / 10
+- java      0 / 10
+- python3   4 / 10
+- rust      0 / 10
 
 ### functional:
-- clojure
-- elixir
-- haskell
-- irdris
-- ml
-- ocaml
-- f#
-- scala
+- clojure   0 / 10
+- elixir    0 / 10
+- f#        0 / 10
+- haskell   0 / 10
+- irdris    0 / 10
+- ml        0 / 10
+- ocaml     0 / 10
+- scala     0 / 10
 
 ### uncommon:
-- ada
-- delphi
-- zig
-- erlang
-- x86-64 assembly
+- ada       0 / 10
+- delphi    0 / 10
+- erlang    0 / 10
+- x86-64    0 / 10
+- zig       0 / 10
+
 
 ### rare:
 - ?
 
 ## How to Run
-- Each directory has a run script, so you can do `run.bat p1.py` on windows
-- TODO: add linux support
+- Each directory has a run script, so you can do `run.sh p1.py` on linux
+- TODO: add windows support?
+
+## How to Install
+- Each language folder has an install.md file with instructions on how to install the language on debian (WSL2)
+- 

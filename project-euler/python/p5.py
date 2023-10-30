@@ -1,5 +1,4 @@
 def smallest_evenly_divisible(numbers):
-	#numbers.sort()
 	out = 1
 	for n in numbers:
 		for i in range(0, len(numbers)):
