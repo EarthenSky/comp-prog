@@ -18,10 +18,10 @@ Project Euler is a good way to learn a language pretty quickly :)
 ### functional:
 - clojure   0 / 10
 - elixir    0 / 10
-- f#        0 / 10
+- f#        0 / 10 (in the ml family too!)
 - haskell   0 / 10
 - irdris    0 / 10
-- ml        0 / 10
+- sml       0 / 10
 - ocaml     0 / 10
 - scala     0 / 10
 
