@@ -22,7 +22,7 @@ Project Euler is a good way to learn a language pretty quickly :)
 - haskell   0 / 10
 - irdris    0 / 10
 - sml       0 / 10
-- ocaml     0 / 10
+- ocaml     2 / 10
 - scala     0 / 10
 
 ### uncommon:
